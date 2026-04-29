@@ -1039,13 +1039,14 @@ function toast(msg){
 }
 
 /* ══ FIREBASE SYNC ══ */
-let appMode = 'viewer';
+let appMode = sessionStorage.getItem('cricMode') || 'viewer';
 let fbListenerActive = false;
 let _lastPushedHash = null;
 let _scorerLoaded = false;
 
 function setMode(mode) {
   appMode = mode;
+  sessionStorage.setItem('cricMode', mode);
   const sb = document.getElementById('modeScoreBtn');
   const vb = document.getElementById('modeViewBtn');
   if(sb) { sb.style.background=mode==='scorer'?'rgba(245,166,35,.25)':'rgba(255,255,255,.05)'; sb.style.borderColor=mode==='scorer'?'var(--gold)':'var(--border)'; sb.style.color=mode==='scorer'?'var(--gold)':'var(--muted)'; }
@@ -1190,6 +1191,8 @@ function confirmWide(extraRuns){
 /* ══ INIT ══ */
 showSquad(0);
 render();
+// Apply saved mode on load (so refresh keeps scorer mode)
+setTimeout(() => setMode(appMode), 500);
 </script>
 <!-- NB MODAL -->
 <div id="nbModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center">
